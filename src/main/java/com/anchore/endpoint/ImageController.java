@@ -30,18 +30,19 @@ private static final  Logger LOGGER=Logger.getLogger(ImageController.class.getNa
 
 @RequestMapping(value="/api/image" ,method = RequestMethod.POST)
 @ResponseBody
-public List<ImagePojo>getReponseImage(@RequestBody ImagePojo imagePojo){
-final List<ImagePojo>listImages= new ArrayList<>();
+public List<ImageEntity>getReponseImage(@RequestBody ImagePojo imagePojo){
+List<ImageEntity>actualValue=new ArrayList<>();
 LOGGER.info("#######Requested Body########");
 LOGGER.info("--> {}"+imagePojo.getDigest());
 LOGGER.info("--> {}"+imagePojo.getCreated_at());
 LOGGER.info("--> {}"+imagePojo.getTag());
+LOGGER.info("--> {}"+imagePojo.getDockerfile());
 if(imagePojo!=null) {
-ImagePojo actualPojo=imageService.saveImageDetails(imagePojo);
-LOGGER.info("#######Adding POJO to List########"+actualPojo.toString());
-listImages.add(actualPojo); 
-LOGGER.info("ADDED to LIST and Size is :::::::"+listImages.size());
+actualValue=imageService.saveImageDetails(imagePojo);
+LOGGER.info("#######Adding POJO to List########"+actualValue.toString());
+
+LOGGER.info("ADDED to LIST and Size is :::::::"+actualValue.size());
 }
-return listImages;  	
+return actualValue;  	
 }
 }

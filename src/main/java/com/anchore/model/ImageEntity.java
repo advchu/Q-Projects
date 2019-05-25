@@ -1,13 +1,18 @@
 package com.anchore.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -24,6 +29,13 @@ public class ImageEntity {
 	@CreatedDate
 	@Column(name="created_date",nullable = false)
 	private String created_at;
+	
+   @Embedded
+   @ElementCollection
+   @AttributeOverrides(value = {
+           @AttributeOverride(name = "status", column = @Column(length = 10))
+   })
+   private Collection<Digest> lisOfDigest = new ArrayList<Digest>();
 	 
    public Long getId()  
     {  
@@ -51,6 +63,12 @@ public class ImageEntity {
 	}
 	public void setCreated_at(String created_at) {
 		this.created_at = created_at;
+	}
+	public Collection<Digest> getlistOfDigest() {
+		return lisOfDigest;
+	}
+	public void setlistOfDigest(Collection<Digest> lisOfDigest) {
+		this.lisOfDigest =lisOfDigest;
 	}
 
 }

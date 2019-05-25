@@ -14,5 +14,6 @@
         <!-- Echo the SQL to stdout -->
         <property name="show_sql">true</property>
         <mapping class="com.anchore.model.ImageEntity" />
+        <mapping class="com.anchore.model.Digest" />
     </session-factory>
 </hibernate-configuration>

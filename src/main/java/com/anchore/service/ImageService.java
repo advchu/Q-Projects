@@ -1,5 +1,12 @@
 package com.anchore.service;
-
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+/*
+ * created by RK.Nayak
+ * May 24/2019
+ * 
+ */
 import java.util.logging.Logger;
 
 import org.hibernate.Session;
@@ -8,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.anchore.helper.HibernateUtil;
+import com.anchore.model.Digest;
 import com.anchore.model.ImageEntity;
 import com.anchore.pojo.ImagePojo;
 
@@ -15,35 +23,36 @@ import com.anchore.pojo.ImagePojo;
 public class ImageService {
 private static final  Logger LOGGER=Logger.getLogger(ImageService.class.getName());
 
-public ImagePojo saveImageDetails(final ImagePojo imagePojo) {
+public  List<ImageEntity> saveImageDetails(final ImagePojo imagePojo) {
 	LOGGER.info("############saving Image Details##############");
     Session ses=HibernateUtil.getSessionFactory().openSession();
- 	ImageEntity imageEnity=new ImageEntity();
- 	imageEnity.setDigest(imagePojo.getDigest());
- 	imageEnity.setTag(imagePojo.getTag());
-	imageEnity.setCreated_at(imagePojo.getCreated_at());
+ 	ImageEntity imageEntity=new ImageEntity();
+ 	imageEntity.setDigest(imagePojo.getDigest());
+ 	imageEntity.setTag(imagePojo.getTag());
+	imageEntity.setCreated_at(imagePojo.getCreated_at());
+	Digest digest=new Digest();
+	digest.setStatus(imagePojo.getDockerfile().stream().iterator().next().getStatus());
+	imageEntity.getlistOfDigest().add(digest);
 	try {
 		/*
 		 * we need to handle here for unnatural exception occurences
 		 */
 	Transaction tx=ses.beginTransaction();
 	LOGGER.info("####Transaction begins for images######"+imagePojo.toString());
-	ses.save(imageEnity);
+	ses.save(imageEntity);
   	tx.commit();
-	ses.clear();
-	ses.close();
-	
+
 }
 	catch(Exception e) {
+		LOGGER.log(Level.WARNING, ">>>>>>transaction Failied<<<<<<<<<<");;
 		e.printStackTrace();
 	
 	}
-	ModelMapper mapper=new ModelMapper();
-	ImagePojo mappedPojo=mapper.map(imageEnity, ImagePojo.class);
-    LOGGER.info("mapped Object after Model Mapper---->"+mappedPojo.toString());
-    return mappedPojo;
-	
-	
+ LOGGER.log(Level.CONFIG, "########Query Executed #######");		
+  List<ImageEntity>list= ses.createQuery("from ImageEntity").list();
+  return list;
+   
+    
 }
 
 }
