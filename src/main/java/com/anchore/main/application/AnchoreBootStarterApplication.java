@@ -7,16 +7,15 @@ package com.anchore.main.application;
 
 import java.util.Arrays;
 
-import javax.persistence.Entity;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.hateoas.config.EnableEntityLinks;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication(scanBasePackages = {
@@ -31,8 +30,16 @@ public class AnchoreBootStarterApplication {
 		SpringApplication.run(AnchoreBootStarterApplication.class, args);
 	}
 	
-	
 	@Bean
+	   public RestTemplate getRestTemplate() {
+	      return new RestTemplate();
+	   }
+	@Bean
+	RestOperations rest(RestTemplateBuilder restTemplateBuilder) {
+	    return restTemplateBuilder.basicAuthentication("admin", "foobar").build();
+	}
+	
+	@Bean	
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 	    return args -> {
 
