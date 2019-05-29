@@ -6,6 +6,7 @@ import java.util.List;
 import com.anchore.model.Digest;
 
 public class ImagePojo {
+	private String repo;
 	private String digest;
 	private String tag;
 	private String created_at;
@@ -35,11 +36,18 @@ public class ImagePojo {
 	public void setDockerfile(Collection<Digest> dockerfile) {
 		this.dockerfile = dockerfile;
 	}
+	public String getRepo() {
+		return repo;
+	}
+	public void setRepo(String repo) {
+		this.repo = repo;
+	}
 	@Override
 	public String toString() {
-		return "ImagePojo [digest=" + digest + ", tag=" + tag + ", created_at=" + created_at + ", dockerfile="
-				+ dockerfile + "]";
+		return "ImagePojo [repo=" + repo + ", digest=" + digest + ", tag=" + tag + ", created_at=" + created_at
+				+ ", dockerfile=" + dockerfile + "]";
 	}
+	
 
 
 }
